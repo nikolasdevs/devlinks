@@ -12,7 +12,7 @@ const Login = () => {
         <div className="header">
           <Image src={logo} alt="DevLink Logo" />
         </div>
-        <div className="formBox bg-grey-100 p-10">
+        <div className="formBox bg-grey-100 p-10  rounded-xl">
           <div className="flex flex-col gap-10">
             <div className="top-form">
               <h1 className="text-[2rem] font-bold">Login</h1>
@@ -40,7 +40,7 @@ const Login = () => {
                     {" "}
                     <LockKey weight="fill" className="text-grey-400" />
                   </span>
-                  <input type="email" placeholder="Enter your password" />{" "}
+                  <input type="password" placeholder="Enter your password" />{" "}
                 </div>
               </div>
               <button className="auth-btn">Login</button>
@@ -48,7 +48,9 @@ const Login = () => {
                 <p>
                   {" "}
                   Don’t have an account?{" "}
-                  <Link className="text-primary-dark" href="/register">Create account</Link>{" "}
+                  <Link className="text-primary-dark" href="/register">
+                    Create account
+                  </Link>{" "}
                 </p>
               </div>
             </form>

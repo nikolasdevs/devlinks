@@ -24,6 +24,10 @@ form {
   @apply flex flex-col gap-6;
 }
 
+.top-form {
+  @apply flex flex-col gap-2;
+}
+
 .inputBox {
   @apply flex flex-col gap-1;
 }
@@ -33,15 +37,23 @@ label {
 }
 
 input {
-  @apply py-3;
+  @apply py-3 w-full outline-none;
 }
 
 .inputGroup {
-  @apply border border-grey-300 rounded-lg  flex items-center gap-3 px-4;
+  @apply border border-grey-300 rounded-lg  flex items-center gap-3 px-4 w-[396px];
+}
+
+.inputGroup:active,
+.auth-btn:active {
+  box-shadow: 0px 0px 32px 0px rgba(99, 60, 255, 0.25);
 }
 
 .auth-btn {
-  @apply bg-primary-dark   text-white rounded-lg py-[11px] px-[27px] ;
+  @apply bg-primary-dark   text-white rounded-lg py-[11px] px-[27px];
+}
+.auth-btn:hover {
+  @apply bg-primary-medium;
 }
 
 @layer utilities {
