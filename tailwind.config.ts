@@ -15,7 +15,7 @@ const config: Config = {
         "primary-dark": "#633CFF",
         "primary-medium": "#BEADFF",
         "primary-light": "#EFEBFF",
-        accent: "##FF3939",
+        accent: "#FF3939",
         "grey-500": "#333333",
         "grey-400": "#737373",
         "grey-300": "#d9d9d9",

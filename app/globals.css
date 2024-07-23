@@ -32,8 +32,8 @@ form {
   @apply flex flex-col gap-1;
 }
 
-label {
-  @apply text-xs text-grey-400;
+.label {
+  @apply text-xs ;
 }
 
 input {
@@ -41,7 +41,7 @@ input {
 }
 
 .inputGroup {
-  @apply border border-grey-300 rounded-lg  flex items-center gap-3 px-4 w-[396px];
+  @apply border rounded-lg  flex items-center gap-3 px-4 w-[396px];
 }
 
 .inputGroup:active,
@@ -54,6 +54,11 @@ input {
 }
 .auth-btn:hover {
   @apply bg-primary-medium;
+}
+
+.text-danger {
+
+  @apply text-accent text-xs w-full text-end;
 }
 
 @layer utilities {
