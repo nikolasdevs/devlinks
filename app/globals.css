@@ -33,10 +33,10 @@ form {
 }
 
 .label {
-  @apply text-xs ;
+  @apply text-xs;
 }
 
-input {
+input{
   @apply py-3 w-full outline-none;
 }
 
@@ -49,20 +49,19 @@ input {
   box-shadow: 0px 0px 32px 0px rgba(99, 60, 255, 0.25);
 }
 
-.auth-btn {
-  @apply bg-primary-dark   text-white rounded-lg py-[11px] px-[27px];
+.btn {
+  @apply rounded-lg py-[11px] px-[27px];
+}
+.auth {
+  @apply bg-primary-dark   text-white;
+}
+.link-btn {
+  @apply bg-primary-light text-primary-dark;
 }
 .auth-btn:hover {
   @apply bg-primary-medium;
 }
 
 .text-danger {
-
   @apply text-accent text-xs w-full text-end;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
 }

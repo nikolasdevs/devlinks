@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import React, { useState } from "react";
 import { EnvelopeSimple } from "@phosphor-icons/react/dist/ssr";
@@ -96,9 +97,9 @@ const Register = () => {
         <div className="formBox bg-grey-100 p-10  rounded-xl">
           <div className="flex flex-col gap-10">
             <div className="top-form">
-              <h1 className="text-[2rem] font-bold">Login</h1>
+              <h1 className="text-[2rem] font-bold">Create account</h1>
               <p className=" text-grey-400">
-                Add your details below to get back into the app
+                Let's get you started sharing your links!
               </p>
             </div>
             <form action="" onSubmit={handleSignup}>

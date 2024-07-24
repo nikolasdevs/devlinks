@@ -178,7 +178,7 @@ const Login: React.FC<{}> = () => {
                 )}
                 <button
                   type="submit"
-                  className="auth-btn"
+                  className="auth btn"
                   disabled={isSubmitting}
                 >
                   Login
