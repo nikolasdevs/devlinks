@@ -11,6 +11,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc, setDoc } from "@firebase/firestore";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { getErrorMessage } from "@/utils/errorHandler";
 
 interface Users {
   email: string;
@@ -55,33 +56,10 @@ const Login: React.FC<{}> = () => {
       } else {
         setErrors({ general: "Please verify your email before you log in" });
       }
-    } catch (error) {
-      if (error instanceof Error) {
-        let errorMessage =
-          "An unexpected error occurred. Please try again later.";
-
-        switch (error.message) {
-          case "Firebase: Error (auth/network-request-failed).":
-            errorMessage =
-              "Network error. Please check your internet connection.";
-            break;
-          case "Firebase: Error (auth/email-already-in-use).":
-            errorMessage = "Email already in use. Please try logging in.";
-            break;
-          case "Firebase: Error (auth/invalid-email).":
-            errorMessage = "Invalid email address. Please enter a valid email.";
-            break;
-          case "Firebase: Error (auth/invalid-password).":
-            errorMessage = "Invalid password. Enter a valid password.";
-            break;
-          default:
-            break;
-        }
-        console.log(error);
-        setErrors({ general: errorMessage });
-      }
-    } finally {
-      setSubmitting(false);
+    } catch (e) {
+      const errorMessage = getErrorMessage(e);
+      console.error("Sign in failed:", errorMessage);
+      alert("Sign in failed: " + errorMessage);
     }
   };
 

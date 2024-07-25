@@ -1,20 +1,27 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { useLinksStore } from "@/lib/store";
+ // Adjust the import based on your file structure
 import {
   GithubLogo,
   LinkedinLogo,
   YoutubeLogo,
 } from "@phosphor-icons/react/dist/ssr";
+import { Link } from "@/app/dashboard/preview/page";
 
 const LinksPreview: React.FC = () => {
-  const { links, fetchLinks } = useLinksStore();
-  const [fetchedLinks, setFetchedLinks] = useState<any[]>([]); // Initialize as an empty array
+  const { fetchLinks } = useLinksStore();
+  const [fetchedLinks, setFetchedLinks] = useState<Link[]>([]);
 
   useEffect(() => {
-    fetchLinks().then((data) => {
-      setFetchedLinks([]); // Set to an empty array if data is undefined
-    });
+    const loadLinks = async () => {
+      try {
+        const links = await fetchLinks(); // Fetch links from Firestore
+        setFetchedLinks(links); // Set state with fetched links
+      } catch (error) {
+        console.error("Failed to fetch links:", error);
+      }
+    };
+    loadLinks(); // Call async function
   }, [fetchLinks]);
 
   return (

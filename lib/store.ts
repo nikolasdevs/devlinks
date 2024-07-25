@@ -2,29 +2,18 @@ import create from "zustand";
 import {
   addLink,
   deleteLink,
-  fetchLinks as fetchLinksFromService,
+  fetchLinks as fetchLinksFromAPI,
   updateLink,
   updateProfile as updateProfileInService,
 } from "@/app/dashboard/links/linkService";
-
-interface Link {
-  id: string;
-  platform: string;
-  link: string;
-}
-
-interface Profile {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  profileImage: string; 
-}
+import { Link, Profile } from "./interfaces"; // Adjust the path as needed
+import { getErrorMessage } from "@/utils/errorHandler";
+// Adjust the path as needed
 
 interface LinksState {
   profile: Profile;
   links: Link[];
-  fetchLinks: () => Promise<void>;
+  fetchLinks: () => Promise<Link[]>;
   addLink: (platform: string, link: string) => Promise<void>;
   deleteLink: (id: string) => Promise<void>;
   updateLink: (id: string, platform: string, link: string) => Promise<void>;
@@ -34,7 +23,7 @@ interface LinksState {
     firstName: string,
     lastName: string,
     email: string,
-    profileImage: null,
+    profileImage: string | null
   ) => Promise<void>;
 }
 
@@ -48,12 +37,9 @@ export const useLinksStore = create<LinksState>((set) => ({
   },
   links: [],
   fetchLinks: async () => {
-    try {
-      const links = await fetchLinksFromService(); // Fetch from service
-      set({  }); // Update state with fetched links
-    } catch (error) {
-      console.error("Failed to fetch links:", error);
-    }
+    const links = await fetchLinksFromAPI();
+    set({ links });
+    return links;
   },
   addLink: async (platform, link) => {
     try {
@@ -64,7 +50,9 @@ export const useLinksStore = create<LinksState>((set) => ({
         }));
       }
     } catch (error) {
-      console.error("Failed to add link:", error);
+      const errorMessage = getErrorMessage(error);
+      console.error("Failed to add link:", errorMessage);
+      alert("Failed to add link: " + errorMessage);
     }
   },
   deleteLink: async (id) => {
@@ -76,7 +64,9 @@ export const useLinksStore = create<LinksState>((set) => ({
         }));
       }
     } catch (error) {
-      console.error("Failed to delete link:", error);
+      const errorMessage = getErrorMessage(error);
+      console.error("Failed to delete link:", errorMessage);
+      alert("Failed to delete link: " + errorMessage);
     }
   },
   updateLink: async (id, platform, link) => {
@@ -90,7 +80,9 @@ export const useLinksStore = create<LinksState>((set) => ({
         }));
       }
     } catch (error) {
-      console.error("Failed to update link:", error);
+      const errorMessage = getErrorMessage(error);
+      console.error("Failed to update link:", errorMessage);
+      alert("Failed to update link: " + errorMessage);
     }
   },
   updateLinkLocally: (id, platform, link) => {
@@ -102,17 +94,19 @@ export const useLinksStore = create<LinksState>((set) => ({
   },
   updateProfile: async (userId, firstName, lastName, email, profileImage) => {
     try {
+      const image = profileImage ?? ""; // Handle null case by assigning an empty string
       const updatedProfile = await updateProfileInService(
         userId,
         firstName,
         lastName,
         email,
-        profileImage
-        
+        image
       );
-      set({  });
+      set({ profile: updatedProfile });
     } catch (error) {
-      console.error("Failed to update profile:", error);
+      const errorMessage = getErrorMessage(error);
+      console.error("Failed to update profile:", errorMessage);
+      alert("Failed to update profile: " + errorMessage);
     }
   },
 }));
