@@ -86,7 +86,7 @@ const Login: React.FC<{}> = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-[51px]">
+    <div className="flex flex-col items-center justify-center h-screen gap-[51px] max-w-[375px] md:max-w-[768px]  lg:max-w-[1440px] m-auto">
       <div className="header">
         <Image src={logo} alt="DevLink Logo" />
       </div>

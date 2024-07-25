@@ -1,9 +1,11 @@
-import { firestore } from "@/app/firebase/config";
+import { firestore, storage } from "@/app/firebase/config";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   addDoc,
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   orderBy,
   query,
@@ -60,3 +62,53 @@ export const updateLink = async (
     return false;
   }
 };
+// linkService.ts
+
+export const updateProfile = async (
+  userId: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  profileImage: File | null
+): Promise<{
+  firstName: string;
+  lastName: string;
+  email: string;
+  profileImage: string;
+}> => {
+  const userDocRef = doc(firestore, "users", userId);
+
+  let imageUrl = "";
+
+  if (profileImage) {
+    const imageRef = ref(storage, `profileImages/${userId}`);
+    await uploadBytes(imageRef, profileImage);
+    imageUrl = await getDownloadURL(imageRef);
+  }
+
+  await updateDoc(userDocRef, {
+    firstName,
+    lastName,
+    email,
+    profileImage: imageUrl,
+  });
+
+  return { firstName, lastName, email, profileImage: imageUrl };
+};
+
+
+  export const fetchUserProfile = async (userId: string) => {
+    try {
+      const userDoc = doc(firestore, "users", userId);
+      const userSnapshot = await getDoc(userDoc);
+      if (userSnapshot.exists()) {
+        return userSnapshot.data();
+      } else {
+        console.log("No such document!");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching profile: ", error);
+      return null;
+    }
+  };
