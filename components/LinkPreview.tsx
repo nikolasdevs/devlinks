@@ -13,7 +13,7 @@ const LinksPreview: React.FC = () => {
 
   useEffect(() => {
     fetchLinks().then((data) => {
-      setFetchedLinks(data || []); // Set to an empty array if data is undefined
+      setFetchedLinks([]); // Set to an empty array if data is undefined
     });
   }, [fetchLinks]);
 

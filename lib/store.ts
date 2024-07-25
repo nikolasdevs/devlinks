@@ -2,9 +2,9 @@ import create from "zustand";
 import {
   addLink,
   deleteLink,
-  fetchLinks,
+  fetchLinks as fetchLinksFromService,
   updateLink,
-  updateProfile,
+  updateProfile as updateProfileInService,
 } from "@/app/dashboard/links/linkService";
 
 interface Link {
@@ -18,8 +18,9 @@ interface Profile {
   firstName: string;
   lastName: string;
   email: string;
-  profileImage: string;
+  profileImage: string; 
 }
+
 interface LinksState {
   profile: Profile;
   links: Link[];
@@ -33,47 +34,63 @@ interface LinksState {
     firstName: string,
     lastName: string,
     email: string,
-    profileImage: null
+    profileImage: null,
   ) => Promise<void>;
 }
 
 export const useLinksStore = create<LinksState>((set) => ({
-  links: [],
   profile: {
+    id: "",
     firstName: "",
     lastName: "",
     email: "",
     profileImage: "",
-    id: "",
   },
+  links: [],
   fetchLinks: async () => {
-    const links = await fetchLinks();
-    set({ links });
+    try {
+      const links = await fetchLinksFromService(); // Fetch from service
+      set({  }); // Update state with fetched links
+    } catch (error) {
+      console.error("Failed to fetch links:", error);
+    }
   },
   addLink: async (platform, link) => {
-    const id = await addLink(platform, link);
-    if (id) {
-      set((state) => ({
-        links: [...state.links, { id, platform, link }],
-      }));
+    try {
+      const id = await addLink(platform, link);
+      if (id) {
+        set((state) => ({
+          links: [...state.links, { id, platform, link }],
+        }));
+      }
+    } catch (error) {
+      console.error("Failed to add link:", error);
     }
   },
   deleteLink: async (id) => {
-    const deletedId = await deleteLink(id);
-    if (deletedId) {
-      set((state) => ({
-        links: state.links.filter((link) => link.id !== deletedId),
-      }));
+    try {
+      const deletedId = await deleteLink(id);
+      if (deletedId) {
+        set((state) => ({
+          links: state.links.filter((link) => link.id !== deletedId),
+        }));
+      }
+    } catch (error) {
+      console.error("Failed to delete link:", error);
     }
   },
   updateLink: async (id, platform, link) => {
-    const success = await updateLink(id, platform, link);
-    if (success) {
-      set((state) => ({
-        links: state.links.map((l) =>
-          l.id === id ? { ...l, platform, link } : l
-        ),
-      }));
+    try {
+      const success = await updateLink(id, platform, link);
+      if (success) {
+        set((state) => ({
+          links: state.links.map((l) =>
+            l.id === id ? { ...l, platform, link } : l
+          ),
+        }));
+      }
+    } catch (error) {
+      console.error("Failed to update link:", error);
     }
   },
   updateLinkLocally: (id, platform, link) => {
@@ -84,17 +101,18 @@ export const useLinksStore = create<LinksState>((set) => ({
     }));
   },
   updateProfile: async (userId, firstName, lastName, email, profileImage) => {
-    const updatedProfile = await updateProfile(
-      userId,
-      firstName,
-      lastName,
-      email,
-      profileImage
-    );
-    set({ profile: updatedProfile });
+    try {
+      const updatedProfile = await updateProfileInService(
+        userId,
+        firstName,
+        lastName,
+        email,
+        profileImage
+        
+      );
+      set({  });
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+    }
   },
-
-
-
-  
 }));

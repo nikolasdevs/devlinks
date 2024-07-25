@@ -3,11 +3,10 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Image as ImagePng } from "@phosphor-icons/react/dist/ssr";
 import Preview from "@/components/preview";
 import Header from "@/components/Header";
-import { updateProfile, fetchUserProfile } from "../links/linkService";
 import { useLinksStore } from "@/lib/store";
 import { storage } from "@/app/firebase/config";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { v4 as uuidv4 } from "uuid";
+
 import { getAuth } from "firebase/auth";
 import Image from "next/image";
 
@@ -18,7 +17,7 @@ const Profile: React.FC = () => {
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>("");
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     const auth = getAuth();
@@ -43,7 +42,7 @@ const Profile: React.FC = () => {
     if (userId) {
       let imageURL = imagePreview;
       if (profileImage) {
-        const imageRef = ref(storage, `images/${profileImage.name + uuidv4()}`);
+        const imageRef = ref(storage, `images/${profileImage.name}`);
         const uploadTask = uploadBytesResumable(imageRef, profileImage);
         uploadTask.on(
           "state_changed",
@@ -66,14 +65,14 @@ const Profile: React.FC = () => {
           async () => {
             imageURL = await getDownloadURL(uploadTask.snapshot.ref);
             console.log("File available at", imageURL);
-            await updateProfile(userId, firstName, lastName, email, imageURL);
-            updateProfileStore(userId, firstName, lastName, email, imageURL);
+            // await updateProfile(userId, firstName, lastName, email, imageURL);
+            // updateProfileStore(userId, firstName, lastName, email, imageURL);
             setImagePreview(imageURL);
           }
         );
       } else {
-        await updateProfile(userId, firstName, lastName, email, imageURL);
-        updateProfileStore(userId, firstName, lastName, email, imageURL);
+        // await updateProfile(userId, firstName, lastName, email, imageURL);
+        // updateProfileStore(userId, firstName, lastName, email, imageURL);
       }
     }
   };
@@ -96,6 +95,14 @@ const Profile: React.FC = () => {
     const response = await fetch(`/api/user/${userId}`);
     const data = await response.json();
     return data;
+  };
+  const handleUploadClick = () => {
+    const inputElement = document.getElementById(
+      "imageInput"
+    ) as HTMLInputElement;
+    if (inputElement) {
+      inputElement.click();
+    }
   };
 
   return (
@@ -122,9 +129,7 @@ const Profile: React.FC = () => {
                 <div className="flex items-center gap-6">
                   <div
                     className="flex flex-col justify-center items-center gap-2 w-[193px] h-[193px] bg-primary-light rounded-xl"
-                    onClick={() =>
-                      document.getElementById("imageInput").click()
-                    }
+                    onClick={handleUploadClick}
                   >
                     {imagePreview ? (
                       <Image
